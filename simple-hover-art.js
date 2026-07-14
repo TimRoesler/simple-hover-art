@@ -197,17 +197,30 @@ Hooks.on("hoverToken", (token, hovered) => {
     if (isNPC) return;
   }
 
-  // Determine which image to display
-  let imgPath = null;
-  const artType = game.settings.get("simple-hover-art", "artType");
-  if (artType === "character" && actor) {
-    imgPath = actor.img;
-    // Fall back to token image if character image is the default mystery man
-    if (imgPath === "icons/svg/mystery-man.svg" && token.document.texture.src) {
+  // Determine which image to display.
+  //
+  // A token-specific image stored by macros or other modules has priority.
+  let imgPath = token.document.getFlag(
+    "simple-hover-art",
+    "specificArt"
+  ) || null;
+
+  if (!imgPath) {
+    const artType = game.settings.get("simple-hover-art", "artType");
+
+    if (artType === "character" && actor) {
+      imgPath = actor.img;
+
+      // Fall back to token image if character image is the default mystery man
+      if (
+        imgPath === "icons/svg/mystery-man.svg"
+        && token.document.texture.src
+      ) {
+        imgPath = token.document.texture.src;
+      }
+    } else {
       imgPath = token.document.texture.src;
     }
-  } else {
-    imgPath = token.document.texture.src;
   }
 
   // Don't show if there's no valid image path or if it's the mystery man
