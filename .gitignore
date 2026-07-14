@@ -1,0 +1,7 @@
+# Release artifacts
+/dist/
+
+# Local tooling
+node_modules/
+.npm/
+.DS_Store

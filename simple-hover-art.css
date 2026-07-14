@@ -1,0 +1,133 @@
+/* Simple Hover Art Stylesheet */
+
+#hover-art-display-container {
+  position: fixed;
+  width: 250px;
+  height: 250px;
+  z-index: 100;
+  pointer-events: none;
+  
+  /* Glassmorphism base style */
+  background: rgba(20, 20, 25, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  
+  /* Layout & Masking */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  
+  /* Transitions */
+  opacity: 0;
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+              transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Position Coordinate Definitions */
+#hover-art-display-container.pos-bottom-left {
+  left: 20px;
+  bottom: 110px; /* Sits cleanly above the players list (#players) */
+}
+
+#hover-art-display-container.pos-bottom-right {
+  right: 320px; /* Sits next to the expanded sidebar */
+  bottom: 30px;
+}
+body:has(#ui-right.collapsed) #hover-art-display-container.pos-bottom-right,
+#interface:has(#ui-right.collapsed) #hover-art-display-container.pos-bottom-right,
+body:has(#sidebar.collapsed) #hover-art-display-container.pos-bottom-right {
+  right: 60px;
+}
+
+#hover-art-display-container.pos-top-left {
+  left: 100px; /* Sits to the right of scene controls (#ui-left) */
+  top: 20px;
+}
+
+#hover-art-display-container.pos-top-right {
+  right: 320px; /* Sits next to the expanded sidebar */
+  top: 20px;
+}
+body:has(#ui-right.collapsed) #hover-art-display-container.pos-top-right,
+#interface:has(#ui-right.collapsed) #hover-art-display-container.pos-top-right,
+body:has(#sidebar.collapsed) #hover-art-display-container.pos-top-right {
+  right: 60px;
+}
+
+/* Micro-animations based on position side */
+#hover-art-display-container.pos-bottom-left,
+#hover-art-display-container.pos-top-left {
+  transform: translate(-15px, 0) scale(0.95);
+}
+
+#hover-art-display-container.pos-bottom-right,
+#hover-art-display-container.pos-top-right {
+  transform: translate(15px, 0) scale(0.95);
+}
+
+/* Active State (Reset transform) */
+#hover-art-display-container.active {
+  opacity: 1;
+  transform: translate(0, 0) scale(1) !important;
+}
+
+/* Accent Glow Border (Foundry-like theme) */
+#hover-art-display-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, rgba(255, 100, 0, 0.2), rgba(255, 200, 0, 0.1)) border-box;
+  mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: destination-out;
+  pointer-events: none;
+}
+
+/* Media element (Image or Video) */
+.hover-art-media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 11px; /* Slightly smaller to respect outer border radius */
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* Text Overlay with Character Name */
+.hover-art-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 12px 10px 12px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0) 100%);
+  color: #f0f0f0;
+  font-family: var(--font-primary, "Signika", sans-serif);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  letter-spacing: 0.5px;
+  border-bottom-left-radius: 11px;
+  border-bottom-right-radius: 11px;
+}
+
+/* Caption Accent Line */
+.hover-art-caption::after {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, #ff6400, #ffb300);
+  margin: 6px auto 0 auto;
+  border-radius: 1px;
+  box-shadow: 0 0 6px rgba(255, 100, 0, 0.6);
+}
